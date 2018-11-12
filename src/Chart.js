@@ -125,6 +125,8 @@ class CandleStickChartWithMA extends React.Component {
 
       .on("handleMouseMove", function(p) {
         let cur = this;
+        window.mouseXY = p.mouseXY;
+
         chartCanvas.forEach((cc, index) => {
           let target = cc;
           let e = Object.assign({}, p.e);
@@ -222,22 +224,37 @@ class CandleStickChartWithMA extends React.Component {
       });
 
 
-
     window.jwerty.key("←", (e) => {
-      /*chartCanvas.forEach((cc, index) => {
-        that.refs["cc_" + (index + 1)].handlePan([0,0], financeDiscontinuousScale([]), {dx:10,dy:10}, that.refs["cc_" + (index + 1)].mutableState.currentCharts, e);
-      });*/
+      let mouseXY = window.mouseXY || [this.refs["cc_1"].props.width / 2, this.refs["cc_1"].props.height / 2];
+
+      let timeLength = this.refs["cc_1"].state.plotData.length;
+      let timeInterval = Math.floor(0.8 * this.refs["cc_1"].props.width / timeLength);
+      chartCanvas.forEach((cc, index) => {
+        that.refs["cc_" + (index + 1)].handleMouseMove([mouseXY[0] - timeInterval, mouseXY[1]], "mouse", e);
+      });
     });
     window.jwerty.key("→", (e) => {
+      let mouseXY = window.mouseXY || [this.refs["cc_1"].props.width / 2, this.refs["cc_1"].props.height / 2];
+
+      let timeLength = this.refs["cc_1"].state.plotData.length;
+      let timeInterval = Math.floor(0.8 * this.refs["cc_1"].props.width / timeLength);
+      chartCanvas.forEach((cc, index) => {
+        that.refs["cc_" + (index + 1)].handleMouseMove([mouseXY[0] + timeInterval, mouseXY[1]], "mouse", e);
+      });
     });
     window.jwerty.key("↑", (e) => {
+      let mouseXY = window.mouseXY || [this.refs["cc_1"].props.width / 2, this.refs["cc_1"].props.height / 2];
+
       chartCanvas.forEach((cc, index) => {
-        that.refs["cc_" + (index + 1)].handleZoom(1, [100, 100], e);//e.type=='keydown'
+        console.log(index, that.refs["cc_" + (index + 1)]);
+        that.refs["cc_" + (index + 1)].handleZoom(1, mouseXY, e);//e.type=='keydown'
       });
     });
     window.jwerty.key("↓", (e) => {
+      let mouseXY = window.mouseXY || [this.refs["cc_1"].props.width / 2, this.refs["cc_1"].props.height / 2];
+
       chartCanvas.forEach((cc, index) => {
-        that.refs["cc_" + (index + 1)].handleZoom(-1, [100, 100], e);//e.type=='keydown'
+        that.refs["cc_" + (index + 1)].handleZoom(-1, mouseXY, e);//e.type=='keydown'
       });
     });
     window.jwerty.key("shift+↑", () => {
@@ -330,71 +347,91 @@ class CandleStickChartWithMA extends React.Component {
       xAccessor,
       displayXAccessor
     } = xScaleProvider(calculatedData);
+
     const start = xAccessor(last(data));
     const end = xAccessor(data[Math.max(0, data.length - 150)]);
     const xExtents = [start, end];
 
     //如果【分、时、日、月】线下各使用一个数据请求，那么需要利用一个循环，分别为每一个ChartCanvas实例构建数据对象
     //在循环中根据对象的ChartCanvas的id找出对应的数据集，类似以下代码进行赋值...
+    const initialData1 = initialData.map(d => {
+      return Object.assign({}, d, {
+        close: d.close + Math.random() * 2,
+        high: d.high + Math.random() * 1,
+        low: d.low + Math.random() * 1,
+        open: d.open + Math.random() * 2,
+        volume: d.volume + Math.random() * 2
+      });
+    });
+    const calculatedData1 = ema20(sma20(wma20(tma20(ema50(smaVolume50(initialData1))))));
+    const {
+      data: data1,
+      xScale: xScale1,
+      xAccessor: xAccessor1,
+      displayXAccessor: displayXAccessor1
+    } = xScaleProvider(calculatedData1);
+    const start1 = xAccessor(last(data1));
+    const end1 = xAccessor(data1[Math.max(0, data1.length - 150)]);
+    const xExtents1 = [start1, end1];
+
+
     const initialData2 = initialData.map(d => {
       return Object.assign({}, d, {
-        close: d.close + Math.random()*2,
-        high: d.high + Math.random()*1,
-        low: d.low + Math.random()*1,
-        open: d.open + Math.random()*2,
-        volume: d.volume + Math.random()*2,
+        close: d.close + Math.random() * 2,
+        high: d.high + Math.random() * 1,
+        low: d.low + Math.random() * 1,
+        open: d.open + Math.random() * 2,
+        volume: d.volume + Math.random() * 2
       });
     });
     const calculatedData2 = ema20(sma20(wma20(tma20(ema50(smaVolume50(initialData2))))));
     const {
-      data:data2,
-      xScale:xScale2,
-      xAccessor:xAccessor2,
-      displayXAccessor:displayXAccessor2
+      data: data2,
+      xScale: xScale2,
+      xAccessor: xAccessor2,
+      displayXAccessor: displayXAccessor2
     } = xScaleProvider(calculatedData2);
     const start2 = xAccessor(last(data2));
     const end2 = xAccessor(data2[Math.max(0, data2.length - 150)]);
     const xExtents2 = [start2, end2];
 
 
-
     const initialData3 = initialData.map(d => {
       return Object.assign({}, d, {
-        close: d.close + Math.random()*2,
-        high: d.high + Math.random()*1,
-        low: d.low + Math.random()*1,
-        open: d.open + Math.random()*2,
-        volume: d.volume + Math.random()*2,
+        close: d.close + Math.random() * 2,
+        high: d.high + Math.random() * 1,
+        low: d.low + Math.random() * 1,
+        open: d.open + Math.random() * 2,
+        volume: d.volume + Math.random() * 2
       });
     });
     const calculatedData3 = ema20(sma20(wma20(tma20(ema50(smaVolume50(initialData3))))));
     const {
-      data:data3,
-      xScale:xScale3,
-      xAccessor:xAccessor3,
-      displayXAccessor:displayXAccessor3
+      data: data3,
+      xScale: xScale3,
+      xAccessor: xAccessor3,
+      displayXAccessor: displayXAccessor3
     } = xScaleProvider(calculatedData3);
     const start3 = xAccessor(last(data3));
     const end3 = xAccessor(data3[Math.max(0, data3.length - 150)]);
     const xExtents3 = [start3, end3];
 
 
-
     const initialData4 = initialData.map(d => {
       return Object.assign({}, d, {
-        close: d.close + Math.random()*2,
-        high: d.high + Math.random()*1,
-        low: d.low + Math.random()*1,
-        open: d.open + Math.random()*2,
-        volume: d.volume + Math.random()*2,
+        close: d.close + Math.random() * 2,
+        high: d.high + Math.random() * 1,
+        low: d.low + Math.random() * 1,
+        open: d.open + Math.random() * 2,
+        volume: d.volume + Math.random() * 2
       });
     });
     const calculatedData4 = ema20(sma20(wma20(tma20(ema50(smaVolume50(initialData4))))));
     const {
-      data:data4,
-      xScale:xScale4,
-      xAccessor:xAccessor4,
-      displayXAccessor:displayXAccessor4
+      data: data4,
+      xScale: xScale4,
+      xAccessor: xAccessor4,
+      displayXAccessor: displayXAccessor4
     } = xScaleProvider(calculatedData4);
     const start4 = xAccessor(last(data4));
     const end4 = xAccessor(data4[Math.max(0, data4.length - 150)]);
@@ -412,19 +449,13 @@ class CandleStickChartWithMA extends React.Component {
                      margin={{ left: 70, right: 70, top: 10, bottom: 30 }}
                      type={type}
                      seriesName="MSFT"
-                     data={data}
-                     xScale={xScale}
-                     xAccessor={xAccessor}
-                     onSelect={(e) => {
-                       //console.log(e);
-                       //this.refs.c2.handleMouseEnter()
-                       //console.log(this.refs.c2)
-                     }}
-                     displayXAccessor={displayXAccessor}
-                     xExtents={xExtents}
+                     data={data1}
+                     xScale={xScale1}
+                     xAccessor={xAccessor1}
+                     displayXAccessor={displayXAccessor1}
+                     xExtents={xExtents1}
         >
-
-          <Chart id={11}
+          <Chart id={41}
                  yExtents={[d => [d.high, d.low], sma20.accessor(), wma20.accessor(), tma20.accessor(), ema20.accessor(), ema50.accessor()]}
                  padding={{ top: 10, bottom: 20 }}
           >
@@ -492,7 +523,7 @@ class CandleStickChartWithMA extends React.Component {
             />
           </Chart>
 
-          <Chart id={12}
+          <Chart id={42}
                  yExtents={[d => d.volume, smaVolume50.accessor()]}
                  height={150} origin={(w, h) => [0, h - 150]}
           >
