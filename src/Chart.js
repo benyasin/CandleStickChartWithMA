@@ -230,7 +230,7 @@ class CandleStickChartWithMA extends React.Component {
       let timeLength = this.refs["cc_1"].state.plotData.length;
       let timeInterval = Math.floor(0.8 * this.refs["cc_1"].props.width / timeLength);
       chartCanvas.forEach((cc, index) => {
-        that.refs["cc_" + (index + 1)].handleMouseMove([mouseXY[0] - timeInterval, mouseXY[1]], "mouse", e);
+        that.refs["cc_" + (index + 1)] && that.refs["cc_" + (index + 1)].handleMouseMove([mouseXY[0] - timeInterval, mouseXY[1]], "mouse", e);
       });
     });
     window.jwerty.key("→", (e) => {
@@ -239,22 +239,21 @@ class CandleStickChartWithMA extends React.Component {
       let timeLength = this.refs["cc_1"].state.plotData.length;
       let timeInterval = Math.floor(0.8 * this.refs["cc_1"].props.width / timeLength);
       chartCanvas.forEach((cc, index) => {
-        that.refs["cc_" + (index + 1)].handleMouseMove([mouseXY[0] + timeInterval, mouseXY[1]], "mouse", e);
+        that.refs["cc_" + (index + 1)] && that.refs["cc_" + (index + 1)].handleMouseMove([mouseXY[0] + timeInterval, mouseXY[1]], "mouse", e);
       });
     });
     window.jwerty.key("↑", (e) => {
       let mouseXY = window.mouseXY || [this.refs["cc_1"].props.width / 2, this.refs["cc_1"].props.height / 2];
 
       chartCanvas.forEach((cc, index) => {
-        console.log(index, that.refs["cc_" + (index + 1)]);
-        that.refs["cc_" + (index + 1)].handleZoom(1, mouseXY, e);//e.type=='keydown'
+        that.refs["cc_" + (index + 1)] && that.refs["cc_" + (index + 1)].handleZoom(1, mouseXY, e);//e.type=='keydown'
       });
     });
     window.jwerty.key("↓", (e) => {
       let mouseXY = window.mouseXY || [this.refs["cc_1"].props.width / 2, this.refs["cc_1"].props.height / 2];
 
       chartCanvas.forEach((cc, index) => {
-        that.refs["cc_" + (index + 1)].handleZoom(-1, mouseXY, e);//e.type=='keydown'
+        that.refs["cc_" + (index + 1)] && that.refs["cc_" + (index + 1)].handleZoom(-1, mouseXY, e);//e.type=='keydown'
       });
     });
     window.jwerty.key("shift+↑", () => {
