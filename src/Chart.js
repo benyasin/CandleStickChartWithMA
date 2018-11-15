@@ -73,12 +73,16 @@ class CandleStickChartWithMA extends React.Component {
       })
 
       .on("handleMouseDown", function(p) {
+
+        window.mouseXY = p.mouseXY;
         //mousePosition, currentCharts, e
         //that.refs.cc_2.handleMouseDown(p.mousePosition, [3, 4], p.e);
       })
 
       .on("handleMouseEnter", function(p) {
         let cur = this;
+        window.mouseXY = p.mouseXY;
+
         chartCanvas.forEach((cc, index) => {
           let target = cc;
           let e = Object.assign({}, p.e);
@@ -114,6 +118,8 @@ class CandleStickChartWithMA extends React.Component {
 
       .on("handleMouseLeave", function(p) {
         let cur = this;
+        window.mouseXY = p.mouseXY;
+
         chartCanvas.forEach((cc, index) => {
           let e = Object.assign({}, p.e);
 
@@ -221,40 +227,46 @@ class CandleStickChartWithMA extends React.Component {
             that.refs["cc_" + (index + 1)].handlePanEnd(mousePosition, panStartXScale, dxdy, that.refs["cc_" + (index + 1)].mutableState.currentCharts, e);
           }
         });
-      });
-
+      })
 
     window.jwerty.key("←", (e) => {
-      let mouseXY = window.mouseXY || [this.refs["cc_1"].props.width / 2, this.refs["cc_1"].props.height / 2];
-
-      let timeLength = this.refs["cc_1"].state.plotData.length;
-      let timeInterval = Math.floor(0.8 * this.refs["cc_1"].props.width / timeLength);
-      chartCanvas.forEach((cc, index) => {
-        that.refs["cc_" + (index + 1)] && that.refs["cc_" + (index + 1)].handleMouseMove([mouseXY[0] - timeInterval, mouseXY[1]], "mouse", e);
-      });
+      if (Object.keys(this.refs).length) {
+        let mouseXY = window.mouseXY || [this.refs[Object.keys(this.refs)[0]].props.width / 2, this.refs[Object.keys(this.refs)[0]].props.height / 2];
+        let timeLength = this.refs[Object.keys(this.refs)[0]].state.plotData.length;
+        let timeInterval = Math.floor(0.8 * this.refs[Object.keys(this.refs)[0]].props.width / timeLength);
+        chartCanvas.forEach((cc, index) => {
+          that.refs["cc_" + (index + 1)] && that.refs["cc_" + (index + 1)].handleMouseMove([mouseXY[0] - timeInterval, mouseXY[1]], "mouse", e);
+        });
+      }
     });
     window.jwerty.key("→", (e) => {
-      let mouseXY = window.mouseXY || [this.refs["cc_1"].props.width / 2, this.refs["cc_1"].props.height / 2];
+      if (Object.keys(this.refs).length) {
 
-      let timeLength = this.refs["cc_1"].state.plotData.length;
-      let timeInterval = Math.floor(0.8 * this.refs["cc_1"].props.width / timeLength);
-      chartCanvas.forEach((cc, index) => {
-        that.refs["cc_" + (index + 1)] && that.refs["cc_" + (index + 1)].handleMouseMove([mouseXY[0] + timeInterval, mouseXY[1]], "mouse", e);
-      });
+        console.log(this.refs[Object.keys(this.refs)[0]])
+
+        let mouseXY = window.mouseXY || [this.refs[Object.keys(this.refs)[0]].props.width / 2, this.refs[Object.keys(this.refs)[0]].props.height / 2];
+        let timeLength = this.refs[Object.keys(this.refs)[0]].state.plotData.length;
+        let timeInterval = Math.floor(0.8 * this.refs[Object.keys(this.refs)[0]].props.width / timeLength);
+        chartCanvas.forEach((cc, index) => {
+          that.refs["cc_" + (index + 1)] && that.refs["cc_" + (index + 1)].handleMouseMove([mouseXY[0] + timeInterval, mouseXY[1]], "mouse", e);
+        });
+      }
     });
     window.jwerty.key("↑", (e) => {
-      let mouseXY = window.mouseXY || [this.refs["cc_1"].props.width / 2, this.refs["cc_1"].props.height / 2];
-
-      chartCanvas.forEach((cc, index) => {
-        that.refs["cc_" + (index + 1)] && that.refs["cc_" + (index + 1)].handleZoom(1, mouseXY, e);//e.type=='keydown'
-      });
+      if (Object.keys(this.refs).length) {
+        let mouseXY = window.mouseXY || [this.refs[Object.keys(this.refs)[0]].props.width / 2, this.refs[Object.keys(this.refs)[0]].props.height / 2];
+        chartCanvas.forEach((cc, index) => {
+          that.refs["cc_" + (index + 1)] && that.refs["cc_" + (index + 1)].handleZoom(1, mouseXY, e);//e.type=='keydown'
+        });
+      }
     });
     window.jwerty.key("↓", (e) => {
-      let mouseXY = window.mouseXY || [this.refs["cc_1"].props.width / 2, this.refs["cc_1"].props.height / 2];
-
-      chartCanvas.forEach((cc, index) => {
-        that.refs["cc_" + (index + 1)] && that.refs["cc_" + (index + 1)].handleZoom(-1, mouseXY, e);//e.type=='keydown'
-      });
+      if (Object.keys(this.refs).length) {
+        let mouseXY = window.mouseXY || [this.refs[Object.keys(this.refs)[0]].props.width / 2, this.refs[Object.keys(this.refs)[0]].props.height / 2];
+        chartCanvas.forEach((cc, index) => {
+          that.refs["cc_" + (index + 1)] && that.refs["cc_" + (index + 1)].handleZoom(-1, mouseXY, e);//e.type=='keydown'
+        });
+      }
     });
     window.jwerty.key("shift+↑", () => {
     });
