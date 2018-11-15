@@ -234,27 +234,29 @@ class CandleStickChartWithMA extends React.Component {
         let mouseXY = window.mouseXY || [this.refs[Object.keys(this.refs)[0]].props.width / 2, this.refs[Object.keys(this.refs)[0]].props.height / 2];
         let timeLength = this.refs[Object.keys(this.refs)[0]].state.plotData.length;
         let timeInterval = Math.floor(0.8 * this.refs[Object.keys(this.refs)[0]].props.width / timeLength);
+
+        window.mouseXY = [mouseXY[0] - timeInterval, mouseXY[1]];
         chartCanvas.forEach((cc, index) => {
-          that.refs["cc_" + (index + 1)] && that.refs["cc_" + (index + 1)].handleMouseMove([mouseXY[0] - timeInterval, mouseXY[1]], "mouse", e);
+          that.refs["cc_" + (index + 1)] && that.refs["cc_" + (index + 1)].handleMouseMove(window.mouseXY, "mouse", e);
         });
       }
     });
     window.jwerty.key("→", (e) => {
       if (Object.keys(this.refs).length) {
-
-        console.log(this.refs[Object.keys(this.refs)[0]])
-
         let mouseXY = window.mouseXY || [this.refs[Object.keys(this.refs)[0]].props.width / 2, this.refs[Object.keys(this.refs)[0]].props.height / 2];
         let timeLength = this.refs[Object.keys(this.refs)[0]].state.plotData.length;
         let timeInterval = Math.floor(0.8 * this.refs[Object.keys(this.refs)[0]].props.width / timeLength);
+
+        window.mouseXY = [mouseXY[0] + timeInterval, mouseXY[1]];
         chartCanvas.forEach((cc, index) => {
-          that.refs["cc_" + (index + 1)] && that.refs["cc_" + (index + 1)].handleMouseMove([mouseXY[0] + timeInterval, mouseXY[1]], "mouse", e);
+          that.refs["cc_" + (index + 1)] && that.refs["cc_" + (index + 1)].handleMouseMove(window.mouseXY, "mouse", e);
         });
       }
     });
     window.jwerty.key("↑", (e) => {
       if (Object.keys(this.refs).length) {
         let mouseXY = window.mouseXY || [this.refs[Object.keys(this.refs)[0]].props.width / 2, this.refs[Object.keys(this.refs)[0]].props.height / 2];
+
         chartCanvas.forEach((cc, index) => {
           that.refs["cc_" + (index + 1)] && that.refs["cc_" + (index + 1)].handleZoom(1, mouseXY, e);//e.type=='keydown'
         });
