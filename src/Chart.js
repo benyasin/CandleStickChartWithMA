@@ -79,7 +79,7 @@ class CandleStickChartWithMA extends React.Component {
         //that.refs.cc_2.handleMouseDown(p.mousePosition, [3, 4], p.e);
       })
 
-      .on("handleMouseEnter", function(p) {
+    .on("handleMouseEnter", function(p) {
         let cur = this;
         window.mouseXY = p.mouseXY;
 
@@ -106,6 +106,10 @@ class CandleStickChartWithMA extends React.Component {
             });
             Object.defineProperty(e, "path", {
               value: e.path,
+              writable: true
+            });
+            Object.defineProperty(e, "triggered", {
+              value: target,
               writable: true
             });
             if (e.path && e.path.length) {
@@ -158,6 +162,10 @@ class CandleStickChartWithMA extends React.Component {
               value: e.path,
               writable: true
             });
+            Object.defineProperty(e, "triggered", {
+              value: target,
+              writable: true
+            });
             if (e.path && e.path.length) {
               e.path[0] = target;
             }
@@ -200,6 +208,10 @@ class CandleStickChartWithMA extends React.Component {
             });
             Object.defineProperty(e, "path", {
               value: e.path,
+              writable: true
+            });
+            Object.defineProperty(e, "triggered", {
+              value: target,
               writable: true
             });
             if (e.path && e.path.length) {
